@@ -1,6 +1,6 @@
 """client: client class to export a class to an zmqrpc queue or client."""
 import zmq
-from pymongo.bson import BSON   
+from bson import BSON   
 import os, sys, traceback
 import time
 

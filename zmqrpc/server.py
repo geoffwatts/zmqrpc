@@ -3,7 +3,7 @@ server: Implementing ZMQRPCServer class to export a user class via zmqrpc to ZMQ
 """
 
 import zmq
-from pymongo.bson import BSON   
+from bson import BSON   
 import threading
 import os, sys, traceback
 from zmqrpc import ZMQRPCError, ZMQRPCRemoteError
