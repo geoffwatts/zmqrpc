@@ -3,6 +3,17 @@ ZMQRPC
 
 A Python library that exports a class for RPC via zmq, using BSON for data interchange.
 
+
+Installation
+------------
+
+zmqrpc is registered at pypi.
+
+Install using pip or easy_install:
+
+$> pip install zmqrpc
+
+
 Prerequisites
 -------------
 
@@ -57,7 +68,7 @@ This client connects to our server, then runs the test() method 5000 times.  It 
         pprint.pprint(servers)
 
 
-Installation and Usage
-----------------------
+Usage Notes
+------------
 
-This library is still very early, so I haven't packaged it for installation yet.  The API is likely to change.
+This library is still very early. The API is likely to change.
