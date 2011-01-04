@@ -51,14 +51,15 @@ class ZMQRPCServer:
                     counters[threading.currentThread().name] = job_count
                     methods[threading.currentThread().name] = method
                     runner = {'job_count':job_count,'thread':threading.currentThread().name,'method':import_class.__name__+'.'+method,}
-
+                    
+                    # Find the method in the module, run it.
                     try:
-                        # Find the method in the module, run it.
-                        result = getattr(nuclass,method)(*args,**kwargs)
-                        fail = False
-                    except AttributeError:
-                        fail = True                
-                        tb = "NameError: name '"+method+"' is not defined in ZMQRPC class '"+import_class.__name__+"'"
+                        if hasattr(nuclass,method):
+                            result = getattr(nuclass,method)(*args,**kwargs)
+                            fail = False
+                        else:
+                            fail = True
+                            tb = "NameError: name '"+method+"' is not defined in ZMQRPC class '"+import_class.__name__+"'"
                     except:
                         etype, evalue, etb = sys.exc_info()
                         fail = True
