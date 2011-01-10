@@ -1,5 +1,5 @@
 """Provides an RPC interface for a class via zmq and BSON""" 
-__version__ = "0.1"
+__version__ = "0.1b"
 __author__ = "Geoff Watts"
 
 class ZMQRPCError(Exception):
