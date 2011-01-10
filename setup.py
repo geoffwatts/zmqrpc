@@ -1,11 +1,11 @@
 from setuptools import setup
 import sys
 
-requires = ['pyzmq', 'pymongo']
+requires = ['pyzmq', 'bson']
 
 setup(
     name = "zmqrpc",
-    version = '0.1',
+    version = '0.1b',
     url = 'https://github.com/geoffwatts/zmqrpc',
     author = 'Geoff Watts',
     author_email = 'geoff@editd.com',
