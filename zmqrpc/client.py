@@ -38,7 +38,7 @@ class ZMQRPC(object):
         _dorequest: Set up a BSON string and send zmq REQ to ZMQRPC target
         """
         # Set up bson message
-        bson = BSON.from_dict(msg)
+        bson = BSON.encode(msg)
         
         # Send...
         try:
@@ -62,7 +62,7 @@ class ZMQRPC(object):
         if msg_in == None:
             raise ZMQRPCError('No response')
     
-        result = BSON(msg_in).to_dict()
+        result = BSON(msg_in).decode()
         
         self._lastrun = result.get('runner')
         

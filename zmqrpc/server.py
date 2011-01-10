@@ -29,7 +29,7 @@ class ZMQRPCServer:
         
         while True:
             sockin = socket.recv()
-            message = BSON(sockin).to_dict()
+            message = BSON(sockin).decode()
             result = None
             fail = None
             tb = None
@@ -40,7 +40,7 @@ class ZMQRPCServer:
             
             if method == '__threadstatus__':
                 x = threading.current_thread()
-                socket.send(BSON.from_dict({'runner':None,'traceback':None,'fail':False,'result':{'id':serverid+':'+str(pid)+':'+str(x.name),'alive':x.is_alive(),'job_count':counters.get(x.name,0),'last_method':methods.get(x.name,''),}}))   
+                socket.send(BSON.encode({'runner':None,'traceback':None,'fail':False,'result':{'id':serverid+':'+str(pid)+':'+str(x.name),'alive':x.is_alive(),'job_count':counters.get(x.name,0),'last_method':methods.get(x.name,''),}}))   
             else:
                 try:
                     kwargs = {}
@@ -64,12 +64,12 @@ class ZMQRPCServer:
                         etype, evalue, etb = sys.exc_info()
                         fail = True
                         tb = "\n".join(traceback.format_exception(etype, evalue, etb))
-                    socket.send(BSON.from_dict({'fail':fail,'result':result,'runner':runner,'traceback':tb}))
+                    socket.send(BSON.encode({'fail':fail,'result':result,'runner':runner,'traceback':tb}))
                 except:
                     etype, evalue, etb = sys.exc_info()
                     fail = True
                     tb = "\n".join(traceback.format_exception(etype, evalue, etb))
-                    socket.send(BSON.from_dict({'fail':fail,'result':None,'runner':None,'traceback':tb}))
+                    socket.send(BSON.encode({'fail':fail,'result':None,'runner':None,'traceback':tb}))
 
 
     def __init__(self,import_class):
