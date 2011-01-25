@@ -1,7 +1,7 @@
 from setuptools import setup
 import sys
 
-requires = ['pyzmq', 'bson']
+requires = ['pyzmq', 'pymongo']
 
 setup(
     name = "zmqrpc",
