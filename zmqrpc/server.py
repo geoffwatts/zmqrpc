@@ -13,7 +13,7 @@ LISTEN=0
 CONNECT=1
 
 class ZMQRPCServer:
-    def _thread(self,context,worker_id,import_class,pid,serverid,counters,methods,target,stype):
+    def _thread(self,context,worker_id,import_class,pid,serverid,counters,methods,target,stype,worker_args):
         """
         Worker thread for zmqrpc server - binds to zmq socket (target) and works ZMQRPCServer import_class.
         Instantiated by work() threading
@@ -25,7 +25,11 @@ class ZMQRPCServer:
             socket.bind(target)
         else:
             socket.connect(target)
-        nuclass = import_class()
+
+        if worker_args:
+            nuclass = import_class(**worker_args)
+        else:
+            nuclass = import_class()
         
         while True:
             sockin = socket.recv()
@@ -81,7 +85,7 @@ class ZMQRPCServer:
         self.serverid = os.uname()[1]
         self.context = zmq.Context(1)
 
-    def work(self,workers=1,target="inproc://workers",stype=CONNECT):
+    def work(self,workers=1,target="inproc://workers",stype=CONNECT,worker_args={}):
         """
         Call to spawn serverthreads that will then work forever.
         stype: socket type, either zmqrpc.server.CONNECT or zmqrpc.server.LISTEN
@@ -91,7 +95,7 @@ class ZMQRPCServer:
         counters = {}
         methods = {}
         for i in range(0,workers):
-            thread = threading.Thread(target=self._thread, name='zmqrpc-'+str(i), args=(self.context,i,self.iclass,self.pid,self.serverid,counters,methods,target,stype ))
+            thread = threading.Thread(target=self._thread, name='zmqrpc-'+str(i), args=(self.context,i,self.iclass,self.pid,self.serverid,counters,methods,target,stype,worker_args))
             thread.start()
 
             
