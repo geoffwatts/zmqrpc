@@ -1,15 +1,16 @@
 from setuptools import setup
 import sys
+import zmqrpc
 
 requires = ['pyzmq', 'pymongo']
 
 setup(
     name = "zmqrpc",
-    version = '0.1b',
-    url = 'https://github.com/geoffwatts/zmqrpc',
-    author = 'Geoff Watts',
-    author_email = 'geoff@editd.com',
-    description = "A Python library that exports a class for RPC via zmq, using BSON for data interchange.",
+    version = zmqrpc.__version__,
+    url = zmqrpc.__url__,
+    author = zmqrpc.__author__,
+    author_email = zmqrpc.__author_email__,
+    description = zmqrpc.__description__,
     packages = ['zmqrpc'],
     include_package_data = True,
     install_requires = requires, 
