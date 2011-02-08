@@ -1,6 +1,6 @@
 """Provides an RPC interface for a class via zmq and BSON""" 
 
-__version__ = "0.1d"
+__version__ = "0.1e"
 __url__ = 'https://github.com/geoffwatts/zmqrpc'
 __author__ = "Geoff Watts"
 __author_email__ = 'geoff@editd.com'

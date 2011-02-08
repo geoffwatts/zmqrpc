@@ -2,6 +2,10 @@
 server: Implementing ZMQRPCServer class to export a user class via zmqrpc to ZMQRPC clients, and to arrange queued calls to server threads.
 """
 
+import sys
+if sys.version < '2.6':
+    sys.exit('ERROR: Sorry, python 2.6 is required for the way this module uses threading.')
+
 import zmq
 from bson import BSON   
 import threading
@@ -12,7 +16,7 @@ from zmqrpc import ZMQRPCError, ZMQRPCRemoteError
 LISTEN=0
 CONNECT=1
 
-class ZMQRPCServer:
+class ZMQRPCServer(object):
     def _thread(self,context,worker_id,import_class,pid,serverid,counters,methods,target,stype,worker_args):
         """
         Worker thread for zmqrpc server - binds to zmq socket (target) and works ZMQRPCServer import_class.
@@ -39,6 +43,11 @@ class ZMQRPCServer:
             tb = None
             method = str(message['method'])
             args = message.get('args',[])
+            if self.export and (not method in self.export):
+                tb = "NameError: name '"+method+"' is not exported in ZMQRPC class '"+import_class.__name__+"'"
+                socket.send(BSON.encode({'fail':True,'result':None,'runner':None,'traceback':tb}))
+                return
+                
 
             # Convert kwargs from unicode strings to 8bit strings
             
@@ -76,7 +85,7 @@ class ZMQRPCServer:
                     socket.send(BSON.encode({'fail':fail,'result':None,'runner':None,'traceback':tb}))
 
 
-    def __init__(self,import_class):
+    def __init__(self,import_class,export=None):
         """
         Instantiate this class with your class to export via zmqrpc
         """
@@ -84,6 +93,7 @@ class ZMQRPCServer:
         self.pid = os.getpid()
         self.serverid = os.uname()[1]
         self.context = zmq.Context(1)
+        self.export = export
 
     def work(self,workers=1,target="inproc://workers",stype=CONNECT,worker_args={}):
         """
