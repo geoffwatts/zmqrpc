@@ -2,7 +2,7 @@ from setuptools import setup
 import sys
 import zmqrpc
 
-requires = ['pyzmq', 'pymongo']
+requires = ['pyzmq-static', 'pymongo']
 
 setup(
     name = "zmqrpc",
